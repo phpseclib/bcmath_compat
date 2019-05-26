@@ -238,11 +238,11 @@ abstract class BCMath
      */
     private static function powmod($x, $e, $n, $scale, $pad)
     {
-        if ($e[0] == '-') {
+        if ($e[0] == '-' || $n == '0') {
             return false;
         }
-        if ($n[0] == '-1' || $n == '0') {
-            $n = substr($z, 1);
+        if ($n[0] == '-') {
+            $n = substr($n, 1);
         }
         if ($e == '0') {
             return $scale ?
@@ -369,16 +369,14 @@ abstract class BCMath
                 $numbers = [];
                 $names = ['base', 'exponent', 'modulus'];
         }
-        foreach ($ints as $i => $int) {
+        foreach ($ints as $i => &$int) {
             if (!is_numeric($int)) {
                 $int = '0';
             }
             $pos = strpos($int, '.');
-            if ($pos === false) {
-                $int = $int;
-            } else {
+            if ($pos !== false) {
                 $int = substr($int, 0, $pos);
-                echo "bc math warning: non-zero scale in $name[$i]\n";
+                echo "bc math warning: non-zero scale in $names[$i]\n";
             }
         }
         foreach ($numbers as $i => $arg) {
@@ -418,7 +416,7 @@ abstract class BCMath
         $pad = 0;
         foreach ($numbers as &$num) {
             if (!is_numeric($num)) {
-                $number = '0';
+                $num = '0';
             }
             $num = explode('.', $num);
             if (isset($num[1])) {

@@ -41,6 +41,7 @@ if (!function_exists('bcadd')) {
      */
     function bcadd($left_operand, $right_operand, $scale = 0)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::add($left_operand, $right_operand, $scale);
     }
 
@@ -53,6 +54,7 @@ if (!function_exists('bcadd')) {
      */
     function bccomp($left_operand, $right_operand, $scale = 0)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::comp($left_operand, $right_operand, $scale);
     }
 
@@ -65,7 +67,8 @@ if (!function_exists('bcadd')) {
      */
     function bcdiv($dividend, $divisor, $scale = 0)
     {
-        return BCMath::div($divident, $divisor, $scale);
+        /** @scrutinizer ignore-call */
+        return BCMath::div($dividend, $divisor, $scale);
     }
 
     /**
@@ -77,6 +80,7 @@ if (!function_exists('bcadd')) {
      */
     function bcmod($dividend, $divisor, $scale = 0)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::mod($dividend, $divisor, $scale);
     }
 
@@ -89,6 +93,7 @@ if (!function_exists('bcadd')) {
      */
     function bcmul($dividend, $divisor, $scale = 0)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::mul($dividend, $divisor, $scale);
     }
 
@@ -101,6 +106,7 @@ if (!function_exists('bcadd')) {
      */
     function bcpow($base, $exponent, $scale = 0)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::pow($base, $exponent, $scale);
     }
 
@@ -114,6 +120,7 @@ if (!function_exists('bcadd')) {
      */
     function bcpowmod($base, $exponent, $modulus, $scale = 0)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::powmod($base, $exponent, $modulus, $scale);
     }
 
@@ -124,6 +131,7 @@ if (!function_exists('bcadd')) {
      */
     function bcscale($scale)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::scale($scale);
     }
 
@@ -135,6 +143,7 @@ if (!function_exists('bcadd')) {
      */
     function bcsqrt($operand, $scale = 0)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::sqrt($operand, $scale);
     }
 
@@ -147,6 +156,7 @@ if (!function_exists('bcadd')) {
      */
     function bcsub($left_operand, $right_operand, $scale = 0)
     {
+        /** @scrutinizer ignore-call */
         return BCMath::sub($left_operand, $right_operand, $scale);
     }
 }
