@@ -47,7 +47,7 @@ abstract class BCMath
      * @var int $pad
      * @var boolean $trim
      */
-    private static function format($x, $scale, $pad, $trim = false)
+    private static function format($x, $scale, $pad)
     {
         if (strlen($x) != $pad) {
             $x = str_pad($x, $pad, '0', STR_PAD_LEFT);
@@ -64,13 +64,9 @@ abstract class BCMath
         }
 
         if (isset($temp[1])) {
-            $doTrim = preg_match('#^0*$#', substr($temp[1], $scale));
             $temp[1] = substr($temp[1], 0, $scale);
             $temp[1] = str_pad($temp[1], $scale, '0');
-            if ($trim && $doTrim) {
-                $temp[1] = rtrim($temp[1], '0');
-            }
-        } elseif ($scale && !$trim) {
+        } elseif ($scale) {
             $temp[1] = str_repeat('0', $scale);
         }
         return rtrim(implode('.', $temp), '.');
@@ -129,7 +125,7 @@ abstract class BCMath
         $z = $x->abs()->multiply($y->abs());
         $sign = (self::isNegative($x) ^ self::isNegative($y)) ? '-' : '';
 
-        return $sign . self::format($z, $scale, 2 * $pad, true);
+        return $sign . self::format($z, $scale, 2 * $pad);
     }
 
     /**
@@ -224,13 +220,11 @@ abstract class BCMath
             $temp = new BigInteger($temp);
             list($r) = $temp->divide($r);
             $pad = $scale;
-            $trim = false;
         } else {
             $pad*= abs($y);
-            $trim = true;
         }
 
-        return $sign . self::format($r, $scale, $pad, $trim);
+        return $sign . self::format($r, $scale, $pad);
     }
 
     /**
@@ -251,7 +245,9 @@ abstract class BCMath
             $n = substr($z, 1);
         }
         if ($e == '0') {
-            return '1';
+            return $scale ?
+                '1.' . str_repeat('0', $scale) :
+                '1';
         }
 
         $x = new BigInteger($x);

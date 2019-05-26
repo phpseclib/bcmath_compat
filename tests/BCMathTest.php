@@ -60,6 +60,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider generateTwoParams
+     * @requires PHP 7.3
      */
     public function testMul(...$params)
     {
@@ -122,7 +123,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider generatePowParams
-     * @requires PHP 7.2
+     * @requires PHP 7.3
      */
     public function testPow(...$params)
     {
@@ -152,6 +153,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider generatePowModParams
+     * @requires PHP 7.3
      */
     public function testPowMod(...$params)
     {
