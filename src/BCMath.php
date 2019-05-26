@@ -25,7 +25,7 @@ abstract class BCMath
     /**
      * Default scale parameter for all bc math functions
      */
-    private static $scale = 0;
+    private static $scale;
 
     /**
      * Set or get default scale parameter for all bc math functions
@@ -393,6 +393,10 @@ abstract class BCMath
                     );
                     return null;
             }
+        }
+        if (!isset(self::$scale)) {
+            $scale = ini_get('bcmath.scale');
+            self::$scale = $scale !== false ? $scale : 0;
         }
         $scale = isset($arguments[$params[$name] - 1]) ? $arguments[$params[$name] - 1] : self::$scale;
         switch (true) {
