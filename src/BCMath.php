@@ -30,11 +30,16 @@ abstract class BCMath
     /**
      * Set or get default scale parameter for all bc math functions
      *
-     * @var int $scale
+     * Uses the PHP 7.3+ behavior
+     *
+     * @var int $scale optional
      */
-    private static function scale($scale)
+    private static function scale($scale = null)
     {
-        self::$scale = $scale;
+        if (isset($scale)) {
+            self::$scale = $scale;
+        }
+        return self::$scale;
     }
 
     /**
