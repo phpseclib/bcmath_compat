@@ -20,7 +20,7 @@ use phpseclib\Math\BigInteger;
  * @author  Jim Wigginton <terrafrost@php.net>
  * @access  public
  */
-abstract class bcmath
+abstract class BCMath
 {
     /**
      * Default scale parameter for all bc math functions
@@ -70,10 +70,20 @@ abstract class bcmath
             if ($trim && $doTrim) {
                 $temp[1] = rtrim($temp[1], '0');
             }
-        } else if ($scale && !$trim) {
+        } elseif ($scale && !$trim) {
             $temp[1] = str_repeat('0', $scale);
         }
         return rtrim(implode('.', $temp), '.');
+    }
+
+    /**
+     * Negativity Test
+     *
+     * @var BigInteger $x
+     */
+    private static function isNegative($x)
+    {
+        return $x->compare(new BigInteger()) < 0;
     }
 
     /**
@@ -117,7 +127,7 @@ abstract class bcmath
     private static function mul($x, $y, $scale, $pad)
     {
         $z = $x->abs()->multiply($y->abs());
-        $sign = ($x->isNegative() ^ $y->isNegative()) ? '-' : '';
+        $sign = (self::isNegative($x) ^ self::isNegative($y)) ? '-' : '';
 
         return $sign . self::format($z, $scale, 2 * $pad, true);
     }
@@ -162,7 +172,7 @@ abstract class bcmath
         }
 
         list($q) = $x->divide($y);
-        $z = $y->multiply(new BigInteger($q));
+        $z = $y->multiply($q);
         $z = $x->subtract($z);
 
         return self::format($z, $scale, $pad);
@@ -200,7 +210,7 @@ abstract class bcmath
             return '1';
         }
 
-        $sign = $x->isNegative() ? '-' : '';
+        $sign = self::isNegative($x) ? '-' : '';
         $x = $x->abs();
 
         $r = new BigInteger(1);
@@ -297,7 +307,7 @@ abstract class bcmath
             if (isset($parts[++$i])) {
                 $c+= $parts[$i];
             }
-            if (!$c || $i - $decStart == $scale) {
+            if ((!$c && $i >= $decStart)  || $i - $decStart == $scale) {
                 break;
             }
             if ($decStart == $i) {
@@ -308,6 +318,8 @@ abstract class bcmath
         $result = explode('.', $result);
         if (isset($result[1])) {
             $result[1] = str_pad($result[1], $scale, '0');
+        } elseif ($scale) {
+            $result[1] = str_repeat('0', $scale);
         }
         return implode('.', $result);
     }
@@ -334,11 +346,17 @@ abstract class bcmath
         ];
         if (count($arguments) < $params[$name] - 1) {
             $min = $params[$name] - 1;
-            trigger_error("bc$name() expects at least $min parameters, " . func_num_args() . " given", E_USER_WARNING);
+            trigger_error(
+                "bc$name() expects at least $min parameters, " . func_num_args() . " given",
+                E_USER_WARNING
+            );
             return null;
         }
         if (count($arguments) > $params[$name]) {
-            trigger_error("bc$name() expects at most {$params[$name]} parameters, " . func_num_args() . " given", E_USER_WARNING);
+            trigger_error(
+                "bc$name() expects at most {$params[$name]} parameters, " . func_num_args() . " given",
+                E_USER_WARNING
+            );
             return null;
         }
         $numbers = array_slice($arguments, 0, $params[$name] - 1);
@@ -373,7 +391,10 @@ abstract class bcmath
                 case is_object($arg) && method_exists($arg, '__toString'):
                     break;
                 default:
-                    trigger_error("bc$name() expects parameter $i to be integer, " . gettype($arg) . " given", E_USER_WARNING);
+                    trigger_error(
+                        "bc$name() expects parameter $i to be integer, " . gettype($arg) . " given",
+                        E_USER_WARNING
+                    );
                     return null;
             }
         }
@@ -383,7 +404,10 @@ abstract class bcmath
             case is_string($scale) && preg_match('#0-9\.#', $scale[0]):
                 break;
             default:
-                trigger_error("bc$name() expects parameter {$params[$name]} to be integer, " . gettype($scale) . " given", E_USER_WARNING);
+                trigger_error(
+                    "bc$name() expects parameter {$params[$name]} to be integer, " . gettype($scale) . " given",
+                    E_USER_WARNING
+                );
                 return null;
         }
         $scale = (int) $scale;
@@ -429,6 +453,6 @@ abstract class bcmath
         }
 
         $arguments = array_merge($numbers, $ints, [$scale, $pad]);
-        return self::$name(...$arguments);
+        return call_user_func_array('self::' . $name, $arguments);
     }
 }

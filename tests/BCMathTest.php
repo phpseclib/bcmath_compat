@@ -1,6 +1,6 @@
 <?php
 
-use bcmath_compat\bcmath;
+use bcmath_compat\BCMath;
 
 /**
  * @requires extension bcmath
@@ -44,7 +44,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     public function testAdd(...$params)
     {
         $a = bcadd(...$params);
-        $b = bcmath::add(...$params);
+        $b = BCMath::add(...$params);
         $this->assertSame($a, $b);
     }
 
@@ -54,7 +54,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     public function testSub(...$params)
     {
         $a = bcsub(...$params);
-        $b = bcmath::sub(...$params);
+        $b = BCMath::sub(...$params);
         $this->assertSame($a, $b);
     }
 
@@ -64,7 +64,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     public function testMul(...$params)
     {
         $a = bcmul(...$params);
-        $b = bcmath::mul(...$params);
+        $b = BCMath::mul(...$params);
         $this->assertSame($a, $b);
     }
 
@@ -78,7 +78,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
         }
 
         $a = bcdiv(...$params);
-        $b = bcmath::div(...$params);
+        $b = BCMath::div(...$params);
         $this->assertSame($a, $b);
     }
 
@@ -93,7 +93,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
         }
 
         $a = bcmod(...$params);
-        $b = bcmath::mod(...$params);
+        $b = BCMath::mod(...$params);
         $this->assertSame($a, $b);
     }
 
@@ -124,10 +124,10 @@ class BCMathTest extends PHPUnit\Framework\TestCase
      * @dataProvider generatePowParams
      * @requires PHP 7.2
      */
-    public function testPow()
+    public function testPow(...$params)
     {
         $a = bcpow(...$params);
-        $b = bcmath::pow(...$params);
+        $b = BCMath::pow(...$params);
         $this->assertSame($a, $b);
     }
 
@@ -153,29 +153,29 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     /**
      * @dataProvider generatePowModParams
      */
-    public function testPowMod()
+    public function testPowMod(...$params)
     {
         $a = bcpowmod(...$params);
-        $b = bcmath::powmod(...$params);
+        $b = BCMath::powmod(...$params);
         $this->assertSame($a, $b);
     }
 
     public function testSqrt()
     {
-        $a = bcsqrt('152.2756', 2, 4);
-        $b = bcmath::powmod('152.2756', 2, 4);
+        $a = bcsqrt('152.2756', 4);
+        $b = BCMath::sqrt('152.2756', 4);
         $this->assertSame($a, $b);
 
         $a = bcsqrt('40000');
-        $b = bcmath::powmod('40000');
+        $b = BCMath::sqrt('40000');
         $this->assertSame($a, $b);
 
         $a = bcsqrt('2', 4);
-        $b = bcmath::powmod('2', 4);
+        $b = BCMath::sqrt('2', 4);
         $this->assertSame($a, $b);
     }
 
-    private function setExpectedException($name, $message = null, $code = null)
+    public function setExpectedException($name, $message = null, $code = null)
     {
         if (version_compare(PHP_VERSION, '7.0.0') < 0) {
             parent::setExpectedException($name, $message, $code);

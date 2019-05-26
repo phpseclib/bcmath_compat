@@ -29,7 +29,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-use bcmath_compat\bcmath;
+use bcmath_compat\BCMath;
 
 if (!function_exists('bcadd')) {
     /**
@@ -41,7 +41,7 @@ if (!function_exists('bcadd')) {
      */
     function bcadd($left_operand, $right_operand, $scale = 0)
     {
-        return bcmath::add($left_operand, $right_operand, $scale);
+        return BCMath::add($left_operand, $right_operand, $scale);
     }
 
     /**
@@ -53,7 +53,7 @@ if (!function_exists('bcadd')) {
      */
     function bccomp($left_operand, $right_operand, $scale = 0)
     {
-        return bcmath::comp($left_operand, $right_operand, $scale);
+        return BCMath::comp($left_operand, $right_operand, $scale);
     }
 
     /**
@@ -65,7 +65,7 @@ if (!function_exists('bcadd')) {
      */
     function bcdiv($dividend, $divisor, $scale = 0)
     {
-        return bcmath::div($divident, $divisor, $scale);
+        return BCMath::div($divident, $divisor, $scale);
     }
 
     /**
@@ -77,7 +77,7 @@ if (!function_exists('bcadd')) {
      */
     function bcmod($dividend, $divisor, $scale = 0)
     {
-        return bcmath::mod($dividend, $divisor, $scale);
+        return BCMath::mod($dividend, $divisor, $scale);
     }
 
     /**
@@ -89,7 +89,7 @@ if (!function_exists('bcadd')) {
      */
     function bcmul($dividend, $divisor, $scale = 0)
     {
-        return bcmath::mul($dividend, $divisor, $scale);
+        return BCMath::mul($dividend, $divisor, $scale);
     }
 
     /**
@@ -101,7 +101,7 @@ if (!function_exists('bcadd')) {
      */
     function bcpow($base, $exponent, $scale = 0)
     {
-        return bcmath::pow($base, $exponent, $scale);
+        return BCMath::pow($base, $exponent, $scale);
     }
 
     /**
@@ -114,7 +114,7 @@ if (!function_exists('bcadd')) {
      */
     function bcpowmod($base, $exponent, $modulus, $scale = 0)
     {
-        return bcmath::powmod($base, $exponent, $modulus, $scale);
+        return BCMath::powmod($base, $exponent, $modulus, $scale);
     }
 
     /**
@@ -124,7 +124,7 @@ if (!function_exists('bcadd')) {
      */
     function bcscale($scale)
     {
-        return bcmath::scale($scale);
+        return BCMath::scale($scale);
     }
 
     /**
@@ -135,7 +135,7 @@ if (!function_exists('bcadd')) {
      */
     function bcsqrt($operand, $scale = 0)
     {
-        return bcmath::sqrt($operand, $scale);
+        return BCMath::sqrt($operand, $scale);
     }
 
     /**
@@ -147,6 +147,6 @@ if (!function_exists('bcadd')) {
      */
     function bcsub($left_operand, $right_operand, $scale = 0)
     {
-        return bcmath::sub($left_operand, $right_operand, $scale);
+        return BCMath::sub($left_operand, $right_operand, $scale);
     }
 }
