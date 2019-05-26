@@ -10,7 +10,9 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace phpseclib;
+namespace bcmath_compat;
+
+use phpseclib\Math\BigInteger;
 
 /**
  * BCMath Emulation Class

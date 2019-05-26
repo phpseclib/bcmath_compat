@@ -1,6 +1,6 @@
 <?php
 
-use phpseclib\bcmath;
+use bcmath_compat\bcmath;
 
 /**
  * @requires extension bcmath

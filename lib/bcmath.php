@@ -29,7 +29,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-use phpseclib\bcmath;
+use bcmath_compat\bcmath;
 
 if (!function_exists('bcadd')) {
     /**
