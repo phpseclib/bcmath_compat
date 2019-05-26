@@ -54,27 +54,24 @@ abstract class BCMath
      */
     private static function format($x, $scale, $pad)
     {
+        $sign = self::isNegative($x) ? '-' : '';
+        $x = str_replace('-', '', $x);
+
         if (strlen($x) != $pad) {
             $x = str_pad($x, $pad, '0', STR_PAD_LEFT);
         }
-
         $temp = $pad ? substr_replace($x, '.', -$pad, 0) : $x;
         $temp = explode('.', $temp);
-        switch ($temp[0]) {
-            case '':
-                $temp[0] = '0';
-                break;
-            case '-':
-                $temp[0] = '-0';
+        if ($temp[0] == '') {
+            $temp[0] = '0';
         }
-
         if (isset($temp[1])) {
             $temp[1] = substr($temp[1], 0, $scale);
             $temp[1] = str_pad($temp[1], $scale, '0');
         } elseif ($scale) {
             $temp[1] = str_repeat('0', $scale);
         }
-        return rtrim(implode('.', $temp), '.');
+        return $sign . rtrim(implode('.', $temp), '.');
     }
 
     /**
@@ -127,6 +124,14 @@ abstract class BCMath
      */
     private static function mul($x, $y, $scale, $pad)
     {
+        if ($x == '0' || $y == '0') {
+            $r = '0';
+            if ($scale) {
+                $r.= '.' . str_repeat('0', $scale);
+            }
+            return $r;
+        }
+
         $z = $x->abs()->multiply($y->abs());
         $sign = (self::isNegative($x) ^ self::isNegative($y)) ? '-' : '';
 
@@ -208,7 +213,11 @@ abstract class BCMath
     private static function pow($x, $y, $scale, $pad)
     {
         if ($y == '0') {
-            return '1';
+            $r = '1';
+            if ($scale) {
+                $r.= '.' . str_repeat('0', $scale);
+            }
+            return $r;
         }
 
         $sign = self::isNegative($x) ? '-' : '';

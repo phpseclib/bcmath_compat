@@ -14,7 +14,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
      */
     public function generateTwoParams()
     {
-        return [
+        $r = [
             ['9', '9'],
             ['9.99', '9.99'],
             ['9.99', '9.99', 2],
@@ -34,8 +34,19 @@ class BCMathTest extends PHPUnit\Framework\TestCase
             ['190', '2', 3],
             ['2', '190', 3],
             ['9', '0'],
-            ['0', '9']
+            ['0', '9'],
+            ['-0.0000005', '0', 3],
+            /*
+               there is some wonkyness with bcmul() in PHP 7.3 that this shim doesn't emulate:
+               https://bugs.php.net/78071
+               ie. instead of 0.000 you get -0.000 or vice versa. once a non-zero digit appears
+                   the outputs become consistent
+            */
+            //['-0.0000005', '0.0000001', 3],
+            ['-0', '0'],
+            ['-0', '-0', 4]
         ];
+        return $r;
     }
 
     /**
@@ -74,7 +85,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
      */
     public function testDiv(...$params)
     {
-        if ($params[1] === '0') {
+        if ($params[1] === '0' || $params[1] === '-0') {
             $this->setExpectedException('PHPUnit_Framework_Error_Warning');
         }
 
@@ -89,7 +100,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
      */
     public function testMod(...$params)
     {
-        if ($params[1] === '0') {
+        if ($params[1] === '0' || $params[1] === '-0') {
             $this->setExpectedException('PHPUnit_Framework_Error_Warning');
         }
 
@@ -118,6 +129,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
             ['-9.99', '-3', 10],
             ['0.15', '15', 10],
             ['0.15', '-1', 10],
+            ['5', '0', 4]
         ];
     }
 
