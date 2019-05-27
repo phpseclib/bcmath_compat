@@ -220,6 +220,13 @@ abstract class BCMath
             return $r;
         }
 
+        if (bccomp($y, PHP_INT_MAX) > 0 || bccomp($y, PHP_INT_MIN) <= 0) {
+            trigger_error(
+                "bcpow(): exponent too large",
+                E_USER_WARNING
+            );
+        }
+
         $sign = self::isNegative($x) ? '-' : '';
         $x = $x->abs();
 
@@ -390,7 +397,10 @@ abstract class BCMath
             $pos = strpos($int, '.');
             if ($pos !== false) {
                 $int = substr($int, 0, $pos);
-                echo "bc math warning: non-zero scale in $names[$i]\n";
+                trigger_error(
+                    "bc$name(): non-zero scale in $names[$i]",
+                    E_USER_WARNING
+                );
             }
         }
         foreach ($numbers as $i => $arg) {
