@@ -422,6 +422,7 @@ abstract class BCMath
         }
         $scale = isset($arguments[$params[$name] - 1]) ? $arguments[$params[$name] - 1] : self::$scale;
         switch (true) {
+            case is_bool($scale):
             case is_numeric($scale):
             case is_string($scale) && preg_match('#0-9\.#', $scale[0]):
                 break;

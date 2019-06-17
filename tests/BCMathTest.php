@@ -189,6 +189,13 @@ class BCMathTest extends PHPUnit\Framework\TestCase
         $this->assertSame($a, $b);
     }
 
+    public function testBoolScale()
+    {
+        $a = bcadd('5', '2', false);
+        $b = BCMath::add('5', '2', false);
+        $this->assertSame($a, $b);
+    }
+
     public function setExpectedException($name, $message = null, $code = null)
     {
         if (version_compare(PHP_VERSION, '7.0.0') < 0) {
