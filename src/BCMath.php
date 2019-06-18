@@ -220,7 +220,8 @@ abstract class BCMath
             return $r;
         }
 
-        if (bccomp($y, PHP_INT_MAX) > 0 || bccomp($y, PHP_INT_MIN) <= 0) {
+        $min = defined('PHP_INT_MIN') ? PHP_INT_MIN : ~PHP_INT_MAX;
+        if (bccomp($y, PHP_INT_MAX) > 0 || bccomp($y, $min) <= 0) {
             trigger_error(
                 "bcpow(): exponent too large",
                 E_USER_WARNING
