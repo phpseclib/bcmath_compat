@@ -405,6 +405,8 @@ abstract class BCMath
         }
         foreach ($numbers as $i => $arg) {
             switch (true) {
+                case is_bool($arg):
+                case is_numeric($arg):
                 case is_string($arg):
                 case is_object($arg) && method_exists($arg, '__toString'):
                     break;
@@ -440,7 +442,9 @@ abstract class BCMath
 
         $pad = 0;
         foreach ($numbers as &$num) {
-            if (!is_numeric($num)) {
+            if (is_bool($num)) {
+                $num = $num ? '1' : '0';
+            } elseif (!is_numeric($num)) {
                 $num = '0';
             }
             $num = explode('.', $num);

@@ -196,6 +196,13 @@ class BCMathTest extends PHPUnit\Framework\TestCase
         $this->assertSame($a, $b);
     }
 
+    public function testIntParam()
+    {
+        $a = bccomp('9223372036854775807', 16);
+        $b = BCMath::comp('9223372036854775807', 16);
+        $this->assertSame($a, $b);
+    }
+
     public function setExpectedException($name, $message = null, $code = null)
     {
         if (version_compare(PHP_VERSION, '7.0.0') < 0) {
