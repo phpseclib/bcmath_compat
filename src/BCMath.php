@@ -37,7 +37,7 @@ abstract class BCMath
     private static function scale($scale = null)
     {
         if (isset($scale)) {
-            self::$scale = $scale;
+            self::$scale = (int) $scale;
         }
         return self::$scale;
     }
@@ -421,7 +421,7 @@ abstract class BCMath
         }
         if (!isset(self::$scale)) {
             $scale = ini_get('bcmath.scale');
-            self::$scale = $scale !== false ? $scale : 0;
+            self::$scale = $scale !== false ? intval($scale) : 0;
         }
         $scale = isset($arguments[$params[$name] - 1]) ? $arguments[$params[$name] - 1] : self::$scale;
         switch (true) {
