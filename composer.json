@@ -42,8 +42,5 @@
         "test": "phpunit",
         "check-style": "phpcs src tests",
         "fix-style": "phpcbf src tests"
-    },
-    "provide": {
-      "ext-bcmath": "7.3.5"
     }
 }
