@@ -410,6 +410,7 @@ abstract class BCMath
                 case is_numeric($arg):
                 case is_string($arg):
                 case is_object($arg) && method_exists($arg, '__toString'):
+                case is_null($arg):
                     break;
                 default:
                     trigger_error(
