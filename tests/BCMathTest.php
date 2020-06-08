@@ -35,6 +35,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
             ['2', '190', 3],
             ['9', '0'],
             ['0', '9'],
+            [null, '9'],
             ['-0.0000005', '0', 3],
             /*
                there is some wonkyness with bcmul() in PHP 7.3 that this shim doesn't emulate:
