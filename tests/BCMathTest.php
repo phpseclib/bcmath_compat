@@ -87,7 +87,11 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     public function testDiv(...$params)
     {
         if ($params[1] === '0' || $params[1] === '-0') {
-            $this->setExpectedException('PHPUnit_Framework_Error_Warning');
+            if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+                $this->setExpectedException('DivisionByZeroError');
+            } else {
+                $this->markTestSkipped('< PHP 8.0.0 has different behavior than >= PHP 8.0.0');
+            }
         }
 
         $a = bcdiv(...$params);
@@ -102,7 +106,11 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     public function testMod(...$params)
     {
         if ($params[1] === '0' || $params[1] === '-0') {
-            $this->setExpectedException('PHPUnit_Framework_Error_Warning');
+            if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+                $this->setExpectedException('DivisionByZeroError');
+            } else {
+                $this->markTestSkipped('< PHP 8.0.0 has different behavior than >= PHP 8.0.0');
+            }
         }
 
         $a = bcmod(...$params);
@@ -156,12 +164,17 @@ class BCMathTest extends PHPUnit\Framework\TestCase
             ['9', '9', '17'],
             ['999', '999', '111', 5],
             ['-9', '1024', '123'],
-            ['9', '-1024', '127', 5],
             ['3', '1024', '-149'],
             ['2', '12', '2', 5],
             ['3', '0', '13'],
             ['-3', '0', '13', 4],
         ];
+
+        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+            $a = array_merge($a, [['9', '-1024', '127', 5]]);
+        }
+
+        return $a;
     }
 
     /**
