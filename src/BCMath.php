@@ -224,10 +224,7 @@ abstract class BCMath
 
         $min = defined('PHP_INT_MIN') ? PHP_INT_MIN : ~PHP_INT_MAX;
         if (bccomp($y, PHP_INT_MAX) > 0 || bccomp($y, $min) <= 0) {
-            trigger_error(
-                "bcpow(): exponent too large",
-                E_USER_WARNING
-            );
+            throw new \ValueError('bcpow(): Argument #2 ($exponent) is too large');
         }
 
         $sign = self::isNegative($x) ? '-' : '';
