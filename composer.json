@@ -44,6 +44,6 @@
         "fix-style": "phpcbf src tests"
     },
     "provide": {
-      "ext-bcmath": "7.3.5"
+      "ext-bcmath": "8.0.0"
     }
 }
