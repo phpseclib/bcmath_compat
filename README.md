@@ -3,7 +3,7 @@
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
 
-PHP 5.x/7.x polyfill for bcmath extension
+PHP 5.x-8.x polyfill for bcmath extension
 
 ## Installation
 
