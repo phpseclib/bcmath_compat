@@ -35,15 +35,10 @@ class BCMathTest extends PHPUnit\Framework\TestCase
             ['2', '190', 3],
             ['9', '0'],
             ['0', '9'],
-            [null, '9'],
+            // this became deprecated in PHP 8.1
+            //[null, '9'],
             ['-0.0000005', '0', 3],
-            /*
-               there is some wonkyness with bcmul() in PHP 7.3 that this shim doesn't emulate:
-               https://bugs.php.net/78071
-               ie. instead of 0.000 you get -0.000 or vice versa. once a non-zero digit appears
-                   the outputs become consistent
-            */
-            //['-0.0000005', '0.0000001', 3],
+            ['-0.0000005', '0.0000001', 3],
             ['-0', '0'],
             ['-0', '-0', 4]
         ];
@@ -57,6 +52,11 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     {
         $a = bcadd(...$params);
         $b = BCMath::add(...$params);
+
+        if (version_compare(PHP_VERSION, '8.0.10') < 0 && preg_match('#^-0\.?0*$#', $a)) {
+            $this->markTestSkipped('< PHP 8.0.10 made it so that you can\'t have -0 per http://bugs.php.net/78238');
+        }
+
         $this->assertSame($a, $b);
     }
 
@@ -67,6 +67,11 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     {
         $a = bcsub(...$params);
         $b = BCMath::sub(...$params);
+
+        if (version_compare(PHP_VERSION, '8.0.10') < 0 && preg_match('#^-0\.?0*$#', $a)) {
+            $this->markTestSkipped('< PHP 8.0.10 made it so that you can\'t have -0 per http://bugs.php.net/78238');
+        }
+
         $this->assertSame($a, $b);
     }
 
@@ -78,6 +83,11 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     {
         $a = bcmul(...$params);
         $b = BCMath::mul(...$params);
+
+        if (version_compare(PHP_VERSION, '8.0.10') < 0 && preg_match('#^-0\.?0*$#', $a)) {
+            $this->markTestSkipped('< PHP 8.0.10 made it so that you can\'t have -0 per http://bugs.php.net/78238');
+        }
+
         $this->assertSame($a, $b);
     }
 

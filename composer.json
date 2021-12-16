@@ -1,6 +1,6 @@
 {
     "name":         "phpseclib/bcmath_compat",
-    "description":  "PHP 5.x/7.x polyfill for bcmath extension",
+    "description":  "PHP 5.x-8.x polyfill for bcmath extension",
     "keywords": [
             "bcmath",
             "math",
@@ -44,6 +44,6 @@
         "fix-style": "phpcbf src tests"
     },
     "provide": {
-      "ext-bcmath": "8.0.0"
+      "ext-bcmath": "8.1.0"
     }
 }

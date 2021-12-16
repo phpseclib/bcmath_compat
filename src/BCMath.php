@@ -71,7 +71,11 @@ abstract class BCMath
         } elseif ($scale) {
             $temp[1] = str_repeat('0', $scale);
         }
-        return $sign . rtrim(implode('.', $temp), '.');
+        $result = rtrim(implode('.', $temp), '.');
+        if ($sign == '-' && preg_match('#^0\.?0*$#', $result)) {
+            $sign = '';
+        }
+        return $sign . $result;
     }
 
     /**
@@ -133,9 +137,11 @@ abstract class BCMath
         }
 
         $z = $x->abs()->multiply($y->abs());
-        $sign = (self::isNegative($x) ^ self::isNegative($y)) ? '-' : '';
+        $result = self::format($z, $scale, 2 * $pad);
 
-        return $sign . self::format($z, $scale, 2 * $pad);
+        $sign = (self::isNegative($x) ^ self::isNegative($y)) && !preg_match('#^0\.?0*$#', $result) ? '-' : '';
+
+        return $sign . $result;
     }
 
     /**
@@ -402,19 +408,25 @@ abstract class BCMath
             }
         }
         foreach ($numbers as $i => $arg) {
+            $num = $i + 1;
             switch (true) {
                 case is_bool($arg):
                 case is_numeric($arg):
                 case is_string($arg):
                 case is_object($arg) && method_exists($arg, '__toString'):
-                case is_null($arg):
-                    if (!is_bool($arg) && !is_null($arg) && !is_numeric("$arg")) {
-                        trigger_error("bc$name: bcmath function argument is not well-formed", E_USER_WARNING);
+                    if (!is_bool($arg) && !is_numeric("$arg")) {
+                        throw new \ValueError("bc$name: bcmath function argument is not well-formed");
                     }
+                    break;
+                // PHP >= 8.1 has deprecated the passing of nulls to string parameters
+                case is_null($arg):
+                    $error = "bc$name(): Passing null to parameter #$num (\$$names[$i]) of type string is deprecated";
+                    trigger_error($error, E_USER_DEPRECATED);
                     break;
                 default:
                     $type = is_object($arg) ? get_class($arg) : gettype($arg);
-                    throw new \TypeError("bc$name(): Argument #$i (\$$names[$i]) must be of type string, $type given");
+                    $error = "bc$name(): Argument #$num (\$$names[$i]) must be of type string, $type given";
+                    throw new \TypeError($error);
             }
         }
         if (!isset(self::$scale)) {
