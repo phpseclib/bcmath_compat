@@ -483,7 +483,7 @@ abstract class BCMath
         }
 
         $arguments = array_merge($numbers, $ints, [$scale, $pad]);
-        $result = call_user_func_array('self::' . $name, $arguments);
+        $result = call_user_func_array(self::class . "::$name", $arguments);
         return preg_match('#^-0\.?0*$#', $result) ? substr($result, 1) : $result;
     }
 }
