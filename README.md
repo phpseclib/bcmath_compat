@@ -1,7 +1,7 @@
 # bcmath_compat
 
 [![Software License][ico-license]](LICENSE.md)
-[![CI Status](https://github.com/phpseclib/bcmath_compat/actions/workflows/ci.yml/badge.svg?branch=1.0&event=push "CI Status")](https://github.com/phpseclib/bcmath_compat/actions/workflows/ci.yml?query=branch%3A1.0)
+[![CI Status](https://github.com/phpseclib/bcmath_compat/actions/workflows/ci.yml/badge.svg?branch=2.0&event=push "CI Status")](https://github.com/phpseclib/bcmath_compat/actions/workflows/ci.yml?query=branch%3A2.0)
 
 PHP 5.x-8.x polyfill for bcmath extension
 
