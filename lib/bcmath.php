@@ -169,16 +169,19 @@ if (!class_exists('Error')) {
     {
     }
 }
+$autoLoad = version_compare(PHP_VERSION, '7.1.0', '>=');
 
 // the following was introduced in PHP 7.1.0
-if (!class_exists('ArgumentCountError')) {
+if (!class_exists('ArgumentCountError', $autoload)) {
     class ArgumentCountError extends TypeError
     {
     }
 }
 
+$autoLoad = version_compare(PHP_VERSION, '8.0.0', '>=');
+
 // the following was introduced in PHP 8.0.0
-if (!class_exists('ValueError')) {
+if (!class_exists('ValueError', $autoload)) {
     class ValueError extends Error
     {
     }
