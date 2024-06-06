@@ -1,18 +1,26 @@
-<?php
+<?php //declare(strict_types=1);
 
 use bcmath_compat\BCMath;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\RequiresPhp;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+// use PHPUnit\Framework\Attributes\TestWith;
+
 /**
- * @requires extension bcmath
+ * requires extension bcmath
  */
-class BCMathTest extends PHPUnit\Framework\TestCase
+#[RequiresPhpExtension('bcmath')]
+class BCMathTest extends TestCase
 {
+    static $emsg = '';
     /**
      * Produces all combinations of test values.
      *
      * @return array
      */
-    public function generateTwoParams()
+    public static function generateTwoParams()
     {
         $r = [
             ['9', '9'],
@@ -45,9 +53,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
         return $r;
     }
 
-    /**
-     * @dataProvider generateTwoParams
-     */
+    #[DataProvider('generateTwoParams')]
     public function testAdd(...$params)
     {
         $a = bcadd(...$params);
@@ -60,9 +66,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
         $this->assertSame($a, $b);
     }
 
-    /**
-     * @dataProvider generateTwoParams
-     */
+    #[DataProvider('generateTwoParams')]
     public function testSub(...$params)
     {
         $a = bcsub(...$params);
@@ -76,9 +80,11 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider generateTwoParams
-     * @requires PHP 7.3
+     * requires PHP 7.3
      */
+
+    #[RequiresPhp('>7.3')]
+    #[DataProvider('generateTwoParams')]
     public function testMul(...$params)
     {
         $a = bcmul(...$params);
@@ -91,9 +97,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
         $this->assertSame($a, $b);
     }
 
-    /**
-     * @dataProvider generateTwoParams
-     */
+    #[DataProvider('generateTwoParams')]
     public function testDiv(...$params)
     {
         if ($params[1] === '0' || $params[1] === '-0') {
@@ -110,9 +114,12 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider generateTwoParams
-     * @requires PHP 7.2
+     * dataProvider generateTwoParams
+     * requires PHP 7.2
      */
+
+    #[DataProvider('generateTwoParams')]
+    #[RequiresPhp('>7.2')]
     public function testMod(...$params)
     {
         if ($params[1] === '0' || $params[1] === '-0') {
@@ -133,7 +140,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function generatePowParams()
+    public static function generatePowParams()
     {
         return [
             ['9', '9'],
@@ -154,8 +161,10 @@ class BCMathTest extends PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider generatePowParams
-     * @requires PHP 7.3
+     * requires PHP 7.3
      */
+    #[DataProvider('generatePowParams')]
+    #[RequiresPhp('>7.3')]
     public function testPow(...$params)
     {
         $a = bcpow(...$params);
@@ -168,7 +177,7 @@ class BCMathTest extends PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function generatePowModParams()
+    public static function generatePowModParams()
     {
         return [
             ['9', '9', '17'],
@@ -188,10 +197,13 @@ class BCMathTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider generatePowModParams
-     * @requires PHP 7.3
+     * dataProvider generatePowModParams
+     * requires PHP 7.3
      */
-    public function testPowMod(...$params)
+     #[DataProvider('generatePowModParams')]
+     #[RequiresPhp('>7.3')]
+
+     public function testPowMod(...$params)
     {
         $a = bcpowmod(...$params);
         $b = BCMath::powmod(...$params);
@@ -215,9 +227,19 @@ class BCMathTest extends PHPUnit\Framework\TestCase
 
     public function testBoolScale()
     {
-        $a = bcadd('5', '2', false);
-        $b = BCMath::add('5', '2', false);
-        $this->assertSame($a, $b);
+        if(false) {
+            $exception_thrown = false;
+            try {
+                $a = bcadd('5', '2', false);
+            } catch (TypeError $e) {
+                $exception_thrown = true;
+            }
+            $this->assertSame(true, $exception_thrown);
+        } else {
+            $a = bcadd('5','2', false);
+            $b = BCMath::add('5', '2', false);
+            $this->assertSame($a, $b);
+        }
     }
 
     public function testIntParam()
@@ -244,6 +266,77 @@ class BCMathTest extends PHPUnit\Framework\TestCase
         }
         if (!empty($code)) {
             $this->expectExceptionCode($code);
+        }
+    }
+
+    public static function generateScaleCallstaticParams()
+    {
+        return [
+            [4],
+            [4,2],
+            [4,2,3],
+            [4,2,3,5],
+        ];
+    }
+
+    #[DataProvider('generateScaleCallstaticParams')]
+    public function test_argumentsScaleCallstatic(...$params)
+    {
+        //scale with 1, 2, 3 parameters
+        if (func_num_args() == 1) {
+            bcscale(...$params);
+            BCMath::scale(...$params);
+            $scale = bcscale();
+            $orig = $params[0];
+            $this->assertSame($orig,$scale);
+            $scale = BCMath::scale();
+            $this->assertSame($orig,$scale);
+        } else {
+            $exception_thrown = false;
+            try{
+                BCMath::scale(...$params);
+            } catch (ArgumentCountError $e) {
+                $exception_thrown = true;
+            }
+            $this->assertSame(true, $exception_thrown);
+            if (true) {
+                // start the unit test with: (showing the wrong given values)
+                // phpunit --testdox-test testdox.txt --display-skipped
+                $this->markTestSkipped('ArgumentCountError in ' . $e->getFile() . ':' . $e->getLine() . ' : ' . $e->getMessage());
+            }
+        }
+    }
+    public static function generatePowModCallstaticParams()
+    {
+        return [
+            ['9'],
+            ['9', '17'],
+            ['9', '17', '-111'],
+            ['9', '17', '-111', 5],
+            ['9', '17', '-111', 5, 8],
+        ];
+    }
+    #[DataProvider('generatePowModCallstaticParams')]
+    public function test_argumentsPowModCallstatic(...$params)
+    {
+        //scale with 1, 2, 3 parameters
+        if (func_num_args() > 2 && func_num_args() < 5) {
+            $a = bcpowmod(...$params);
+            $b = BCMath::powmod(...$params);
+            $this->assertSame($a,$b);
+        } else {
+            $exception_thrown = false;
+            try{
+                BCMath::powmod(...$params);
+            } catch (ArgumentCountError $e) {
+                $exception_thrown = true;
+            }
+            $this->assertSame(true, $exception_thrown);
+            if (true) {
+                // start the unit test with: (showing the wrong given values)
+                // phpunit --testdox-test testdox.txt --display-skipped
+                $this->markTestSkipped('ArgumentCountError in ' . $e->getFile() . ':' . $e->getLine() . ' : ' . $e->getMessage());
+            }
         }
     }
 }
